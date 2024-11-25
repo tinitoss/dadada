@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trailers</title>
+    <style>
+        /* Cinematic Colors and Background */
+        body {
+            background-color: #2f2f2f; /* Dark gray background to match film mood */
+            color: #fff; /* White text for contrast */
+            font-family: 'Bebas Neue', sans-serif; /* Bold, cinematic font */
+        }
+
+        .header-container {
+            position: relative;
+            width: 100%;
+            height: 400px; /* Larger header image */
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .header-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            filter: brightness(100%);
+        }
+
+        .header-title {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #f9c200; /* Golden action movie color */
+            font-size: 4rem;
+            text-align: center;
+            font-weight: bold;
+            text-shadow: 5px 5px 15px rgba(0, 0, 0, 0.7); /* More dramatic shadow */
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Video Section */
+        .videos {
+            padding: 30px 20px;
+            background-color: #1c1c1c; /* Dark background for movie trailers */
+        }
+
+        .video-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        /* Video Thumbnails */
+        .video-thumbnail {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%;
+            background-color: #333;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease, opacity 0.3s ease;
+        }
+
+        .video-thumbnail:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(255, 111, 0, 0.8);
+        }
+
+        .video-thumbnail .video-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .video-title {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #f9c200;
+            font-size: 20px;
+            padding: 10px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 5px;
+        }
+
+        /* Modal for Video */
+#video-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+/* Video Player (Iframe) */
+#video-player {
+    max-width: 80%; /* Adjust to a larger width */
+    max-height: 80%; /* Adjust to a larger height */
+    width: 90%; /* Ensure the video player scales well */
+    height: 90%; /* Ensure the video player scales well */
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+#close-modal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #ff0000;
+    color: #fff;
+    border: none;
+    font-size: 1.5rem;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#close-modal:hover {
+    background-color: #d70000;
+}
+
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #292235;
+        }
+
+        body.dark-mode footer {
+            background-color: #292235;
+            color: #fff;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            margin: 30px auto;
+            padding: 12px 20px;
+            width: 100%;
+            max-width: 500px;
+            font-size: 18px;
+            border: 2px solid #f9c200;
+            border-radius: 50px;
+            background-color: #444;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:focus {
+            border-color: #ff0000;
+            box-shadow: 0 0 8px rgba(255, 0, 0, 0.7);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #292235;
+            transition: background-color 0.3s ease;
+        }
+        /* Video Item Styles (Container for video title and thumbnail) */
+.video-item {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+/* Video Title Link Styles */
+.video-title-link {
+    position: absolute;
+    top: -30px; /* Positioned above the thumbnail */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    padding: 5px 10px;
+    border-radius: 5px;
+    z-index: 2;
+}
+
+.video-title-link-text {
+    color: #f9c200; /* Gold color for the link text */
+    font-size: 16px;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.video-title-link-text:hover {
+    color: #ff0000; /* Change to red on hover */
+    text-decoration: underline;
+}
+
+/* Video Thumbnail Styles */
+.video-thumbnail {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 aspect ratio */
+    background-color: #444;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease, opacity 0.3s ease;
+}
+
+.video-thumbnail:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(255, 111, 0, 0.8);
+}
+
+.video-thumbnail .video-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.video-title {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #f9c200; /* Gold color for titles */
+    font-size: 18px;
+    padding: 5px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 5px;
+}
+
+
+    </style>
+</head>
+<body>
+
+    <!-- Header with cinematic background -->
+    <div class="header-container">
+        <img class="header-image" src="images/Picsart_24-11-18_17-38-02-110.jpg" alt="Movie Background">
+        <h1 class="header-title">Trailers</h1>
+    </div>
+
+    <!-- Search Bar -->
+    <input class="search-bar" id="search-bar" type="text" placeholder="Search for a trailer...">
+
+    <section id="videos" class="videos">
+        <div class="video-container">
+                 <!-- Video 1 -->
+                 <div class="video-item">
+                    <div class="video-title-link">
+                        <a href="aksion.html" target="_blank" class="video-title-link-text">Shiko Filmin</a>
+                    </div>
+                    <div class="video-thumbnail" data-video-link="https://youtu.be/gzC9I5L23qM">
+                        <img src="aksion/bubaktrailer.jpg" alt="Video 1 Thumbnail" class="video-img">
+                        <div class="video-title">BUBAK</div>
+                    </div>
+                </div>
+        
+              <!-- Video 1 -->
+              <div class="video-item">
+                <div class="video-title-link">
+                    <a href="dardiladi.html" target="_blank" class="video-title-link-text">Shiko Filmin</a>
+                </div>
+                <div class="video-thumbnail" data-video-link="https://youtu.be/gzC9I5L23qM">
+                    <img src="dardiladi/familja.webp" alt="Video 1 Thumbnail" class="video-img">
+                    <div class="video-title">Dardi&Ladi:Familja</div>
+                </div>
+            </div>
+    
+            <!-- Video 2 -->
+            <div class="video-item">
+                <div class="video-title-link">
+                    <a href="detektivi.html" target="_blank" class="video-title-link-text">Shiko Filmin</a>
+                </div>
+                <div class="video-thumbnail" data-video-link="https://youtu.be/1ItzX4Jh9Zk">
+                    <img src="detektivi/shok.jpg" alt="Video 2 Thumbnail" class="video-img">
+                    <div class="video-title">Detektivi:Shok Misioni</div>
+                </div>
+            </div>
+             <!-- Video 2 -->
+             <div class="video-item">
+                <div class="video-title-link">
+                    <a href="detektivi.html" target="_blank" class="video-title-link-text">Shiko Filmin</a>
+                </div>
+                <div class="video-thumbnail" data-video-link="https://youtu.be/5Ixx2w3UA38">
+                    <img src="detektivi/sekret.jpg" alt="Video 2 Thumbnail" class="video-img">
+                    <div class="video-title">Detektivi:Misioni Sekret</div>
+                </div>
+            </div>
+            <!-- Video 1 -->
+            <div class="video-item">
+                <div class="video-title-link">
+                    <a href="horror.html" target="_blank" class="video-title-link-text">Shiko Filmin</a>
+                </div>
+                <div class="video-thumbnail" data-video-link="https://youtu.be/HWryjxjc7ZY">
+                    <img src="horror/shadow.webp" alt="Video 1 Thumbnail" class="video-img">
+                    <div class="video-title">Shadow</div>
+                </div>
+            </div>
+    
+            <!-- Video 2 -->
+            <div class="video-item">
+                <div class="video-title-link">
+                    <a href="aksion.html" target="_blank" class="video-title-link-text">Shiko Filmin</a>
+                </div>
+                <div class="video-thumbnail" data-video-link="https://youtu.be/5HKMWJue8jA">
+                    <img src="aksion/Thedarkring.jpg" alt="Video 2 Thumbnail" class="video-img">
+                    <div class="video-title">The Dark Ring</div>
+                </div>
+            </div>
+        <!-- Video 1 -->
+        <div class="video-item">
+            <div class="video-title-link">
+                <a href="doublep.html" target="_blank" class="video-title-link-text">Shiko Filmin</a>
+            </div>
+            <div class="video-thumbnail" data-video-link="https://youtu.be/IgyuZYSQ12g">
+                <img src="doublep/attack.jpg" alt="Video 1 Thumbnail" class="video-img">
+                <div class="video-title">The Attack</div>
+            </div>
+        </div>
+
+        <!-- Video 2 -->
+        <div class="video-item">
+            <div class="video-title-link">
+                <a href="dardiladi.html" target="_blank" class="video-title-link-text">Shiko Filmin</a>
+            </div>
+            <div class="video-thumbnail" data-video-link="https://youtu.be/mRWpcoFo_XU">
+                <img src="dardiladi/kujtimet.webp" alt="Video 2 Thumbnail" class="video-img">
+                <div class="video-title">Dardi:Kujtime</div>
+            </div>
+        </div>
+                <!-- Video 1 -->
+                <div class="video-item">
+                    <div class="video-title-link">
+                        <a href="dardiladi.html" target="_blank" class="video-title-link-text">Shiko Filmin</a>
+                    </div>
+                    <div class="video-thumbnail" data-video-link="https://youtu.be/oA_bAU4re7I">
+                        <img src="dardiladi/FROCA.webp" alt="Video 1 Thumbnail" class="video-img">
+                        <div class="video-title">Ladi:Forca</div>
+                    </div>
+                </div>
+        
+                <!-- Video 2 -->
+                <div class="video-item">
+                    <div class="video-title-link">
+                        <a href="dardiladi.html" target="_blank" class="video-title-link-text">Shiko Filmin</a>
+                    </div>
+                    <div class="video-thumbnail" data-video-link="https://youtu.be/53Gc9X5GT70">
+                        <img src="dardiladi/FILLIMI.webp" alt="Video 2 Thumbnail" class="video-img">
+                        <div class="video-title">Dardi&Ladi:Fillimi</div>
+                    </div>
+                </div>
+                <!-- Video 1 -->
+                <div class="video-item">
+                    <div class="video-title-link">
+                        <a href="dardiladi.html" target="_blank" class="video-title-link-text">Shiko Filmin</a>
+                    </div>
+                    <div class="video-thumbnail" data-video-link="https://youtu.be/XEjNcsiwKq4">
+                        <img src="dardiladi/Picsart_24-11-11_21-56-33-776.jpg" alt="Video 1 Thumbnail" class="video-img">
+                        <div class="video-title">Dardi:Love</div>
+                    </div>
+                </div>
+        
+                <!-- Video 2 -->
+                <div class="video-item">
+                    <div class="video-title-link">
+                        <a href="aksion.html" target="_blank" class="video-title-link-text">Shiko Filmin</a>
+                    </div>
+                    <div class="video-thumbnail" data-video-link="https://youtu.be/5nSY4tTQSug">
+                        <img src="aksion/soldiers2.webp" alt="Video 2 Thumbnail" class="video-img">
+                        <div class="video-title">The Soldiers Of Death-2</div>
+                    </div>
+                </div>
+            <!-- Video 1 -->
+            <div class="video-item">
+                <div class="video-title-link">
+                    <a href="horror.html" target="_blank" class="video-title-link-text">Shiko Filmin</a>
+                </div>
+                <div class="video-thumbnail" data-video-link="https://youtu.be/FWgJO2TZDVQ">
+                    <img src="horror/Picsart_24-11-23_14-17-51-476.jpg" alt="Video 1 Thumbnail" class="video-img">
+                    <div class="video-title">25M</div>
+                </div>
+            </div>
+            <div class="video-item">
+                <div class="video-title-link">
+                    <a href="aksion.html" target="_blank" class="video-title-link-text">Shiko Filmin</a>
+                </div>
+                <div class="video-thumbnail" data-video-link="https://youtu.be/5nSY4tTQSug">
+                    <img src="pse/soldier.webp" alt="Video 2 Thumbnail" class="video-img">
+                    <div class="video-title">The Soldiers Of Death-1</div>
+                </div>
+            </div>
+            <!-- Video 2 -->
+            <div class="video-item">
+                <div class="video-title-link">
+                    <a href="dardiladi.html" target="_blank" class="video-title-link-text">Shiko Filmin</a>
+                </div>
+                <div class="video-thumbnail" data-video-link="https://youtu.be/AuhxvZMCFM4">
+                    <img src="dardiladi/Picsart_24-11-11_21-57-30-878.jpg" alt="Video 2 Thumbnail" class="video-img">
+                    <div class="video-title">Dardi&Baca Bush</div>
+                </div>
+            </div>
+    
+            <!-- Video 3 -->
+            <div class="video-item">
+                <div class="video-title-link">
+                    <a href="johnny.html" target="_blank" class="video-title-link-text">Shiko Serialin</a>
+                </div>
+                <div class="video-thumbnail" data-video-link="https://youtu.be/gY1GhAr6Thg">
+                    <img src="images/johnny.jpg" alt="Video 3 Thumbnail" class="video-img">
+                    <div class="video-title">Johnny:Life Style</div>
+                </div>
+            </div>
+    
+            <!-- Video 4 -->
+            <div class="video-item">
+                <div class="video-title-link">
+                    <a href="pse.html" target="_blank" class="video-title-link-text">Shiko Serialin</a>
+                </div>
+                <div class="video-thumbnail" data-video-link="https://youtu.be/SCSLXr7_z5I">
+                    <img src="images/pse.jpg" alt="Video 4 Thumbnail" class="video-img">
+                    <div class="video-title">Pse </div>
+                </div>
+            </div>
+    
+            <!-- Video 5 -->
+            <div class="video-item">
+                <div class="video-title-link">
+                    <a href="heaters.html" target="_blank" class="video-title-link-text">Shiko Serialin</a>
+                </div>
+                <div class="video-thumbnail" data-video-link="https://youtu.be/ScSZtCciI00">
+                    <img src="images/heaters.jpg" alt="Video 5 Thumbnail" class="video-img">
+                    <div class="video-title">The Heaters</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+
+    <!-- Video Modal -->
+    <div id="video-modal">
+        <iframe id="video-player" src="" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <button id="close-modal">Close</button>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Trailers. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Video modal functionality
+        const videoThumbnails = document.querySelectorAll('.video-thumbnail');
+        const videoModal = document.getElementById('video-modal');
+        const videoPlayer = document.getElementById('video-player');
+        const closeButton = document.getElementById('close-modal');
+
+        // Open video modal
+        function openVideoModal(videoLink) {
+            const videoUrl = `https://www.youtube.com/embed/${getYouTubeIdFromUrl(videoLink)}?autoplay=1`;
+            videoPlayer.src = videoUrl;
+            videoModal.style.display = 'flex';
+        }
+
+        // Extract YouTube video ID from URL
+        function getYouTubeIdFromUrl(url) {
+            const videoIdMatch = url.match(/(?:youtu.be\/|youtube.com\/(?:[^\/\n\s]+\/\S+\/|\S*?[?&]v=))([a-zA-Z0-9_-]{11})/);
+            return videoIdMatch && videoIdMatch[1];
+        }
+
+        // Close video modal
+        function closeVideoModal() {
+            videoPlayer.src = '';
+            videoModal.style.display = 'none';
+        }
+
+        // Event listener for video thumbnails
+        videoThumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener('click', () => {
+                const videoLink = thumbnail.getAttribute('data-video-link');
+                openVideoModal(videoLink);
+            });
+        });
+
+        // Close video modal on button click
+        closeButton.addEventListener('click', closeVideoModal);
+
+        // Search functionality
+        const searchBar = document.getElementById('search-bar');
+        searchBar.addEventListener('input', function() {
+            const query = searchBar.value.toLowerCase();
+            videoThumbnails.forEach(thumbnail => {
+                const title = thumbnail.querySelector('.video-title').innerText.toLowerCase();
+                if (title.includes(query)) {
+                    thumbnail.style.display = 'block';
+                } else {
+                    thumbnail.style.display = 'none';
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

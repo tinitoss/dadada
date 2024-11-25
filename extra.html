@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extra Scenes</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            color: #333;
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #121212;
+            color: #f1f1f1;
+        }
+
+        /* Sticky Header */
+        header {
+            position: sticky;
+            top: 0;
+            background-color: #333;
+            color: #fff;
+            padding: 15px 0;
+            text-align: center;
+            font-size: 2rem;
+            z-index: 10;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        header.dark-mode {
+            background-color: #1c1c1c;
+        }
+
+        /* Dark Mode Button */
+        #dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #333;
+            cursor: pointer;
+            z-index: 100;
+            transition: color 0.3s;
+        }
+
+        #dark-mode-toggle.dark-mode-btn {
+            color: #fff;
+        }
+
+        /* Main Content */
+        main {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            color: #f9c200;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+        }
+
+        /* Video List */
+        .video-list {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .video-item {
+            display: flex;
+            align-items: center;
+            background-color: #444;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+            cursor: pointer;
+            flex-basis: 100%; /* Ensure video items take up full width on small screens */
+        }
+
+        .video-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            background-color: #555;
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            margin-right: 20px;
+            transition: transform 0.3s;
+        }
+
+        .video-thumbnail:hover {
+            transform: scale(1.1);
+        }
+
+        .video-content {
+            padding: 20px;
+            color: #fff;
+            flex-grow: 1;
+        }
+
+        .video-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .video-description {
+            font-size: 1rem;
+            line-height: 1.4;
+            max-height: 50px;
+            transition: max-height 0.3s ease-in-out;
+        }
+
+        .video-description.expand {
+            max-height: 200px;
+        }
+
+        /* Video Modal */
+        #video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.3s;
+        }
+
+        #video-player {
+            width: 80%;
+            max-width: 900px;
+            border-radius: 10px;
+        }
+
+        #close-modal {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        #close-modal:hover {
+            background-color: #d70000;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #333;
+            color: #fff;
+        }
+
+        footer.dark-mode {
+            background-color: #222;
+        }
+
+        /* Search and Sort Controls */
+        #search-container {
+            margin-top: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        #search-box,
+        #sort-select {
+            padding: 8px;
+            font-size: 1rem;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 200px;
+        }
+
+        /* Media Queries for Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .video-item {
+                flex-direction: column;
+                align-items: flex-start;
+                flex-basis: 100%;
+                width: 100%;
+            }
+
+            .video-thumbnail {
+                height: 200px;
+            }
+
+            .video-content {
+                padding: 15px;
+            }
+
+            #video-modal {
+                padding: 10px;
+            }
+
+            #video-player {
+                width: 100%;
+            }
+
+            #search-container {
+                gap: 5px;
+                justify-content: flex-start;
+            }
+
+            #search-box,
+            #sort-select {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            h2 {
+                font-size: 2rem;
+                margin-bottom: 20px;
+            }
+
+            .video-title {
+                font-size: 1.2rem;
+            }
+
+            .video-description {
+                font-size: 0.9rem;
+            }
+        }
+        style
+    /* Video Modal */
+    #video-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        padding: 20px;
+    }
+
+    /* Video iframe */
+    #video-player {
+        width: 80%;
+        height: 80%;
+        border: none;
+    }
+
+    /* Close button for video */
+    #close-modal {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background-color: #ff0000;
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    /* Optional: Add a smooth fade-in effect for modal */
+    #video-modal {
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    /* If the modal is visible */
+    #video-modal.show {
+        display: flex;
+        opacity: 1;
+    }
+
+    /* Hide modal initially */
+    #video-modal.hide {
+        display: none;
+        opacity: 0;
+    }
+
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        Extra Scenes
+    </header>
+
+    <!-- Dark Mode Button -->
+    <button id="dark-mode-toggle">&#x263E;</button>
+
+    <!-- Search and Sort Controls -->
+    <div id="search-container">
+        <input type="text" id="search-box" placeholder="Search videos..." />
+        <select id="sort-select">
+            <option value="title">Sort by Title</option>
+            <option value="date">Sort by Date</option>
+        </select>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <h2></h2>
+        <div class="video-list" id="video-list">
+            <!-- Video Items -->
+
+
+            <div class="video-item" data-video-link="https://youtu.be/nSTVvdQkrMU">
+                <div class="video-thumbnail" style="background-image: url('extra/dardiladi.jpg');"></div>
+                <div class="video-content">
+                    <div class="video-title">Ladin e thirr Yllza</div>
+                    <div class="video-description">Kjo skenë ka pasur të shfaqet në fund te filmit "Dardi&Ladi:Familja"...</div>
+                </div>
+            </div>
+            <!-- Video 9 -->
+<div class="video-item" data-video-link="https://youtu.be/AyocflRJrPM">
+    <div class="video-thumbnail" style="background-image: url('extra/paret.webp');"></div>
+    <div class="video-content">
+        <div class="video-title">Pagesat nga shefi</div>
+        <div class="video-description">Kjo skenë nuk është përdorur, pasi nuk e kemi përfunduar siç kishim planifikuar dhe rezultati nuk ishte i kënaqshëm.</div>
+    </div>
+</div>
+
+<!-- Video 10 -->
+<div class="video-item" data-video-link="https://youtu.be/73VU9J14vF0">
+    <div class="video-thumbnail" style="background-image: url('extra/ladi.webp');"></div>
+    <div class="video-content">
+        <div class="video-title">Ladi riktheht në Kosovë</div>
+        <div class="video-description">Kjo skenë nuk është përdorur në film, pasi nuk ka pasur lidhje të qartë dhe vazhdim me filmin e kaluar.</div>
+    </div>
+</div>
+            <div class="video-item" data-video-link="https://youtu.be/SViAOT5QZOE">
+                <div class="video-thumbnail" style="background-image: url('extra/detektivi.jpg');"></div>
+                <div class="video-content">
+                    <div class="video-title">Detektivi shpëton</div>
+                    <div class="video-description">Një nga mënyrat më të qmendura sesi mund të ndërronte ngjarja...</div>
+                </div>
+            </div>
+            <div class="video-item" data-video-link="https://youtu.be/4pBvbSk2MCE">
+                <div class="video-thumbnail" style="background-image: url('extra/lazenun.webp');"></div>
+                <div class="video-content">
+                    <div class="video-title">La Zenun e kupton</div>
+                    <div class="video-description">Jam pishman që nuk e kam përdorur këtë skenë, por kam përdorur një tjetër në filmin "Dardi & Ladi Suskes".</div>
+                </div>
+            </div>
+            <div class="video-item" data-video-link="https://youtu.be/HRxZBolpZG8">
+                <div class="video-thumbnail" style="background-image: url('extra/biseda.jpg');"></div>
+                <div class="video-content">
+                    <div class="video-title">Djali Las Zenun</div>
+                    <div class="video-description">Las Zenun tregon shkurt si erdhi në qytet me vëllain dhe baban, dhe për mallin për djalin. Kjo skenë nuk u përdor, pasi ishte ende herët për historinë e tij.</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Video Modal -->
+    <div id="video-modal">
+        <button id="close-modal">Close</button>
+        <iframe id="video-player" src="" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2024 Extra Scenes
+    </footer>
+
+    <script>
+        // Video modal functionality
+        const videoThumbnails = document.querySelectorAll('.video-thumbnail');
+        const videoModal = document.getElementById('video-modal');
+        const videoPlayer = document.getElementById('video-player');
+        const closeButton = document.getElementById('close-modal');
+    
+        // Open video modal
+        function openVideoModal(videoLink) {
+            const videoUrl = `https://www.youtube.com/embed/${getYouTubeIdFromUrl(videoLink)}?autoplay=1`;
+            videoPlayer.src = videoUrl;
+            videoModal.style.display = 'flex';
+        }
+    
+        // Extract YouTube video ID from URL
+        function getYouTubeIdFromUrl(url) {
+            const videoIdMatch = url.match(/(?:youtu.be\/|youtube.com\/(?:[^\/\n\s]+\/\S+\/|\S*?[?&]v=))([a-zA-Z0-9_-]{11})/);
+            return videoIdMatch && videoIdMatch[1];
+        }
+    
+        // Close video modal
+        function closeVideoModal() {
+            videoPlayer.src = '';
+            videoModal.style.display = 'none';
+        }
+    
+        // Event listener for video thumbnails
+        videoThumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener('click', () => {
+                const videoLink = thumbnail.closest('.video-item').getAttribute('data-video-link');
+                openVideoModal(videoLink);
+            });
+        });
+    
+        // Close video modal on button click
+        closeButton.addEventListener('click', closeVideoModal);
+    
+        // Search functionality
+        const searchBar = document.getElementById('search-box'); // Assuming your search box has this ID
+        searchBar.addEventListener('input', function() {
+            const query = searchBar.value.toLowerCase();
+            const videoItems = document.querySelectorAll('.video-item');
+            videoItems.forEach(item => {
+                const title = item.querySelector('.video-title').innerText.toLowerCase();
+                const description = item.querySelector('.video-description').innerText.toLowerCase();
+                if (title.includes(query) || description.includes(query)) {
+                    item.style.display = ''; // Show matching item
+                } else {
+                    item.style.display = 'none'; // Hide non-matching item
+                }
+            });
+        });
+    </script>
+    
+
+</body>
+
+</html>

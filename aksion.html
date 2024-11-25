@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aksion - Action Movies</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Impact', sans-serif; /* Stronger, more dramatic font */
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a; /* Darker background for intensity */
+            color: #fff;
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #0c0c0c;  /* Darker, more intense dark mode */
+        }
+
+        /* Header Styles */
+        .header-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .header-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center center;
+            filter: brightness(60%);
+        }
+
+        .header-title {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #f9c200; /* Golden color for action movie vibe */
+            font-size: 4rem;
+            text-align: center;
+            font-weight: bold;
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.8);
+            text-transform: uppercase;
+        }
+
+        /* Enhanced Search Bar */
+        .search-bar {
+            margin: 20px auto;
+            padding: 15px 20px;
+            width: 100%;
+            max-width: 500px;
+            font-size: 18px;
+            border: 2px solid #f9c200;
+            border-radius: 50px;
+            background-color: #333;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:focus {
+            border-color: #ff0000; /* Red for intense focus */
+            box-shadow: 0 0 8px rgba(255, 0, 0, 0.7);
+        }
+
+        /* Video Section */
+        .videos {
+            padding: 20px;
+            background-color: #333;
+            color: #fff;
+            transition: background-color 0.3s ease;
+        }
+        /* Dark mode styles for video section */
+ body.dark-mode .videos {
+            background-color: #000000; /* Dark background for the video section */
+            
+        }
+
+        .video-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        /* Video Thumbnail */
+        .video-thumbnail {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 aspect ratio */
+            background-color: #444;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease, opacity 0.3s ease;
+        }
+
+        .video-thumbnail:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.8);
+        }
+
+        .video-thumbnail:hover .video-img {
+            opacity: 0.7;
+        }
+
+        .video-thumbnail .video-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-title {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: #f9c200; /* Gold color for titles */
+            font-size: 18px;
+            padding: 5px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 5px;
+        }
+
+        /* Video Modal */
+        #video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        #video-player {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+
+        #close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #ff0000;
+            color: #fff;
+            border: none;
+            font-size: 1.5rem;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        #close-modal:hover {
+            background-color: #d70000;
+        }
+
+        /* Dark Mode Button */
+        #dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #fff;
+            cursor: pointer;
+            z-index: 101;
+        }
+
+        #dark-mode-toggle.dark-mode-btn {
+            color: #ff0000; /* Red button for the action theme */
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #222;
+            transition: background-color 0.3s ease;
+        }
+
+        body.dark-mode footer {
+            background-color: #000;
+            color: #fff;
+        }
+
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .header-container {
+                height: 250px;
+            }
+
+            .header-title {
+                font-size: 2rem;
+            }
+
+            .video-container {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+
+            .video-title {
+                font-size: 14px;
+            }
+
+            .search-bar {
+                max-width: 400px;
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section with Image and Title Over It -->
+    <div class="header-container">
+        <img src="images/aksion.jpg" alt="Header Image" class="header-image">
+        <div class="header-title">AKSION</div>
+    </div>
+    
+
+    <!-- Button for Dark Mode Toggle -->
+    <button id="dark-mode-toggle">&#x263E;</button>
+
+    <!-- Enhanced Search Bar -->
+    <input type="text" id="search-bar" placeholder="Search Action Movies..." class="search-bar">
+
+    <!-- Videos Section -->
+    <section id="videos" class="videos">
+        <div class="video-container">
+            <!-- Video Thumbnails -->
+              <!-- Video 1 -->
+              <div class="video-thumbnail" data-video-link="https://youtu.be/Ljh6-zE0vxs">
+                <img src="aksion/bubak3.jpg" alt="Video 1 Thumbnail" class="video-img">
+                <div class="video-title">Bubak Part 3</div>
+            </div>
+              <div class="video-thumbnail" data-video-link="https://youtu.be/6UBKlGrw0B4">
+                <img src="aksion/bubak2.jpg" alt="Video 1 Thumbnail" class="video-img">
+                <div class="video-title">Bubak Part 2</div>
+            </div>
+
+            <!-- Video 2 -->
+            <div class="video-thumbnail" data-video-link="https://youtu.be/j9OouNK3hf8">
+                <img src="aksion/bubak1.webp" alt="Video 2 Thumbnail" class="video-img">
+                <div class="video-title">Bubak Part 1</div>
+            </div>
+
+            <div class="video-thumbnail" data-video-link="https://youtu.be/VVPHn0t0Cxw">
+                <img src="aksion/survivorsbattle.jpg" alt="Video 1 Thumbnail" class="video-img">
+                <div class="video-title">Survivor's Battle</div>
+            </div>
+             <!-- Video 1 -->
+             <div class="video-thumbnail" data-video-link="https://youtu.be/y2xDrlAQE2s">
+                <img src="aksion/rrenci.webp" alt="Video 1 Thumbnail" class="video-img">
+                <div class="video-title">Rrenci</div>
+            </div>
+
+            <!-- Video 2 -->
+            <div class="video-thumbnail" data-video-link="https://youtu.be/m7nyC3zeli0">
+                <img src="aksion/Thedarkring.jpg" alt="Video 2 Thumbnail" class="video-img">
+                <div class="video-title">The Dark Ring</div>
+            </div>
+
+            <!-- Video 3 -->
+            <div class="video-thumbnail" data-video-link="https://youtu.be/qB5jpm3nQsc">
+                <img src="aksion/soldiers2.webp" alt="Video 3 Thumbnail" class="video-img">
+                <div class="video-title">The Soldiers Of Death 2</div>
+            </div>
+              <!-- Video 3 -->
+              <div class="video-thumbnail" data-video-link="https://youtu.be/ZQcwVonnxFQ">
+                <img src="aksion/themonster.webp" alt="Video 3 Thumbnail" class="video-img">
+                <div class="video-title">The Monster</div>
+            </div>
+              <!-- Video 3 -->
+              <div class="video-thumbnail" data-video-link="https://youtu.be/Ms0xIN8DdfQ">
+                <img src="aksion/zgjidhjagabuar.webp" alt="Video 3 Thumbnail" class="video-img">
+                <div class="video-title">Zgjidhja e gabuar</div>
+            </div>
+              <!-- Video 3 -->
+              <div class="video-thumbnail" data-video-link="https://youtu.be/o5jTPN9s6i0">
+                <img src="aksion/soldier1.webp" alt="Video 3 Thumbnail" class="video-img">
+                <div class="video-title">The Soldiers Of Death</div>
+            </div>
+
+
+            <!-- More videos here -->
+        </div>
+    </section>
+
+    <!-- Modal for Video -->
+    <div id="video-modal" class="video-modal">
+        <iframe id="video-player" width="100%" height="500" src="" frameborder="0" allowfullscreen></iframe>
+        <button id="close-modal">Close</button>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 Aksion . All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Dark Mode Toggle Button
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            darkModeToggle.classList.toggle('dark-mode-btn');
+        });
+
+        // Video modal functionality
+        const videoThumbnails = document.querySelectorAll('.video-thumbnail');
+        const videoModal = document.getElementById('video-modal');
+        const videoPlayer = document.getElementById('video-player');
+        const closeButton = document.getElementById('close-modal');
+
+        // Open video modal
+        function openVideoModal(videoLink) {
+            const videoUrl = `https://www.youtube.com/embed/${getYouTubeIdFromUrl(videoLink)}?autoplay=1`;
+            videoPlayer.src = videoUrl;
+            videoModal.style.display = 'flex';
+        }
+
+        // Extract YouTube video ID from URL
+        function getYouTubeIdFromUrl(url) {
+            const videoIdMatch = url.match(/(?:youtu.be\/|youtube.com\/(?:[^\/\n\s]+\/\S+\/|\S*?[?&]v=))([a-zA-Z0-9_-]{11})/);
+            return videoIdMatch && videoIdMatch[1];
+        }
+
+        // Close video modal
+        function closeVideoModal() {
+            videoPlayer.src = '';
+            videoModal.style.display = 'none';
+        }
+
+        // Event listener for video thumbnails
+        videoThumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener('click', () => {
+                const videoLink = thumbnail.getAttribute('data-video-link');
+                openVideoModal(videoLink);
+            });
+        });
+
+        // Close video modal on button click
+        closeButton.addEventListener('click', closeVideoModal);
+
+        // Search functionality
+        const searchBar = document.getElementById('search-bar');
+        searchBar.addEventListener('input', function() {
+            const query = searchBar.value.toLowerCase();
+            videoThumbnails.forEach(thumbnail => {
+                const title = thumbnail.querySelector('.video-title').innerText.toLowerCase();
+                if (title.includes(query)) {
+                    thumbnail.style.display = '';
+                } else {
+                    thumbnail.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

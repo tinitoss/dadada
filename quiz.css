@@ -1,0 +1,341 @@
+
+        body {
+            margin-left: 185px;
+            padding: 0;
+            background: url('images/viti.jpg');  /* Image only for testing */
+            background-size: cover;
+            background-position: center center;
+            height: 100%;
+            width: 80%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Snow Effect */
+        .snow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .snowflake {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            pointer-events: none;
+            animation: fall 10s linear infinite, drift 15s linear infinite;
+        }
+
+        /* Snowflake Falling and Drifting Effect */
+        @keyframes fall {
+            0% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        @keyframes drift {
+            0% {
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(50px);
+            }
+            100% {
+                transform: translateX(-50px);
+            }
+        }
+
+        /* Quiz App Container */
+        .quiz-app {
+            margin: 8px auto;
+            height: 690px;
+            width: 350px;
+            background-color: #252C4A;
+            border-style: solid;
+            border-width: 18px;
+            border-color: #282B49;
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden; /* To keep content inside bounds */
+        }
+
+        /* Main App Header */
+        .app {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 35px;
+            color: white;
+            text-align: center;
+        }
+
+        /* Question Text */
+        .q-text {
+            color: #8E97BD;
+            text-align: left;
+            margin-left: 20px;
+            margin-top: 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 20px;
+        }
+
+        /* Question Container */
+        #question {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 25px;
+            color: white;
+            padding: 10px 20px 10px 20px;
+        }
+
+        /* Choices Container */
+        #choices {
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+
+        /* Button Style */
+        .btn {
+            width: 250px;
+            height: 50px;
+            margin-bottom: 10px;
+            margin-left: 40px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            font-size: 15px;
+            border-style: solid;
+            border-width: 3px;
+            border-radius: 20px;
+            background-color: transparent;
+            color: white;
+            border-color: #254567;
+            outline: none;
+        }
+
+        /* Hover Effect for Buttons */
+        .btn:hover {
+            background: linear-gradient(90deg, rgba(250, 81, 113, 1) 46%, rgba(250, 81, 113, 1) 50%, rgba(37, 44, 74, 1) 100%);
+        }
+
+        /* Timer Bar */
+        .time-bar {
+            margin: 30px auto;
+            width: 300px;
+            height: 30px;
+            border-style: solid;
+            border-width: 2px;
+            border-radius: 30px;
+            border-color: #41476A;
+            background-color: #252C4A;
+        }
+
+        /* Timer Bar Inner (shows time remaining) */
+        .time-left {
+            width: 300px;
+            height: 30px;
+            border-style: none;
+            border-radius: 30px;
+            background-color: rgb(250, 81, 113);
+        }
+
+        /* Time Label */
+        .time {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            color: white;
+            text-align: center;
+        }
+
+        /* Dots Below Timer */
+        #dots {
+            color: #8E97BD;
+            margin-left: 20px;
+            margin-top: -20px;
+        }
+
+        /* Score Section */
+        #score {
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 25px;
+            color: white;
+        }
+
+        /* Final Score Text */
+        #final-score {
+            color: white;
+        }
+
+        /* Restart Button */
+        #restartBtn {
+            margin-top: 20px;
+            padding: 10px 30px;
+            background-color: #117EEB;
+            border-radius: 20px;
+            color: white;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        /* Hover Effect for Restart Button */
+        #restartBtn:hover {
+            background-color: white;
+            color: #117EEB;
+            border: 1px solid #117EEB;
+        }
+
+        /* Mobile and Tablet Responsive Styles */
+
+        /* Portrait view (smaller mobile devices) */
+        @media (max-width: 767px) {
+            body {
+                margin-left: 0;  /* Remove the margin to allow content to fit */
+                width: 100%;  /* Allow body to take full width */
+            }
+
+            .quiz-app {
+                width: 90%;  /* Make the quiz app container smaller */
+                height: auto;  /* Adjust height for smaller screens */
+                margin: 20px auto;
+                border-width: 10px;
+            }
+
+            .app {
+                font-size: 28px;  /* Reduce font size for smaller screens */
+            }
+
+            .q-text, #question {
+                font-size: 18px;  /* Adjust font size for questions */
+                margin-left: 10px;  /* Less space on the left */
+            }
+
+            .btn {
+                width: 80%;  /* Make buttons fill more of the screen width */
+                margin-left: auto;
+                margin-right: auto;
+                font-size: 14px;
+            }
+
+            .time-bar {
+                width: 90%;  /* Adjust timer bar width */
+            }
+
+            .time-left {
+                width: 90%;  /* Adjust timer progress bar */
+            }
+
+            #score, .time {
+                font-size: 18px;  /* Adjust font size for smaller screens */
+            }
+
+            #restartBtn {
+                width: 80%;  /* Adjust restart button to be more mobile-friendly */
+                font-size: 16px;
+            }
+        }
+
+        /* Landscape view (phones in landscape) */
+        @media (max-width: 1024px) and (orientation: landscape) {
+            body {
+                margin-left: 0;  /* Remove margin to fit content better in landscape */
+                width: 100%;  /* Full width on mobile landscape */
+            }
+
+            .quiz-app {
+                width: 85%;  /* Make quiz app container larger */
+                margin: 20px auto;
+                border-width: 12px;
+                height: auto;
+            }
+
+            .app {
+                font-size: 30px;  /* Increase font size for landscape */
+            }
+
+            .q-text, #question {
+                font-size: 20px;
+            }
+
+            .btn {
+                width: 75%;  /* Make buttons larger in landscape */
+                font-size: 16px;
+            }
+
+            #restartBtn {
+                width: 75%;  /* Adjust restart button width */
+                font-size: 18px;
+            }
+        }
+
+        /* Tablet Landscape */
+        @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+            .quiz-app {
+                width: 70%;  /* Adjust for tablet landscape */
+                height: 70%;
+                margin: 40px auto;
+                border-width: 15px;
+            }
+
+            .app {
+                font-size: 32px;  /* Adjust font size for tablet landscape */
+            }
+
+            .q-text, #question {
+                font-size: 22px;
+            }
+
+            .btn {
+                width: 65%;  /* Adjust button width */
+                font-size: 16px;
+            }
+
+            #restartBtn {
+                width: 65%;  /* Adjust restart button width */
+                font-size: 16px;
+            }
+        }
+
+        /* Desktop and larger screens (including laptops) */
+        @media (min-width: 1025px) {
+            body {
+                margin-left: 185px;  /* Keep the original margin */
+                width: 80%;
+            }
+
+            .quiz-app {
+                width: 350px;  /* Keep the original width for desktop */
+                height: 690px;
+                margin: 8px auto;
+            }
+
+            .app {
+                font-size: 35px;  /* Original font size for desktop */
+            }
+
+            .q-text, #question {
+                font-size: 20px;
+            }
+
+            .btn {
+                width: 250px;
+                font-size: 15px;
+            }
+
+            #restartBtn {
+                width: 250px;
+                font-size: 18px;
+            }
+        }
